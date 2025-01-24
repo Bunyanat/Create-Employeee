@@ -1,11 +1,23 @@
 <?php
-use App\Http\Controllers\ChirpController;
+
+use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\ProfileController;
-use App\Http\Controllers\ProductController;
-use App\Http\Controllers\UserController;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Facades\Route;
 use Inertia\Inertia;
+
+// หน้าแสดงข้อมูลพนักงาน
+Route::get('/employee', [EmployeeController::class, 'index'])
+->name('employee.index');
+
+// หน้าแบบฟอร์มสำหรับเพิ่มข้อมูลพนักงาน
+Route::get('/employee/create', [EmployeeController::class, 'create'])
+->name('employee.create');
+
+// Function สำหรับบันทึกข้อมูลพนักงาน
+Route::post('/employee', [EmployeeController::class, 'store'])
+->name('employee.store');
+
 
 Route::get('/', function () {
     return Inertia::render('Welcome', [
@@ -15,29 +27,6 @@ Route::get('/', function () {
         'phpVersion' => PHP_VERSION,
     ]);
 });
-
-Route::resource('chirps', ChirpController::class)
-    // ->only(['index', 'store'])
-   // ->only(['index', 'store', 'update'])
-    ->only(['index', 'store', 'update', 'destroy'])
-    ->middleware(['auth', 'verified']);
-
-/*Route::get('/user/{id}', function (string $id) {
-    return 'User '.$id;
-}); */
-
-Route::get('/greeting', function () {
-    return 'Hello World';
-});
-
-Route::get('/user', [UserController::class, 'index']);
-Route::get('/user/{user}', [UserController::class, 'show']);
-
-
-Route::middleware(['auth'])->group(function () {
-    Route::get('/products', [ProductController::class, 'index'])->name('products.index');
-    Route::get('/products/{id}', [ProductController::class, 'show'])->name('products.show');
-});//ตั้งค่าให้หากไม่loginจะไม่สามารถดูprodctได้
 
 Route::get('/dashboard', function () {
     return Inertia::render('Dashboard');
